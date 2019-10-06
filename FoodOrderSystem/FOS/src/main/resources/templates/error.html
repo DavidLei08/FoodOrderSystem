@@ -1,0 +1,20 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+<link th:href="@{/css/admin.css}" rel="stylesheet">
+<script th:src="@{/layui/layui.js}"></script>
+<title>error page</title>
+</head>
+<body>
+	<div id="container">
+		<div class="admin-login-background" >
+		<font th:text="${responseStatus != null? responseStatus:404}" size="7">404</font><br>
+		<font th:text="${errorMsg != null ? errorMsg:'Resource not found'}" color="red"></font>
+</div>
+</div>
+
+</body>
+</html>

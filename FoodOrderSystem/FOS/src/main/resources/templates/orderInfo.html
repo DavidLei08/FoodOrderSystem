@@ -1,0 +1,144 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>order info</title>
+<link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+<script th:src="@{/layui/layui.all.js}"></script>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/jquery/jquery-1.9.1.min.js}"></script>
+<style>
+.content {
+	width: 50%;
+	margin-left: 25%;
+	border: 1px;
+	border-color: #e64340;
+	margin-top: 4.0rem;
+}
+
+.top {
+	top: 0;
+	position:absolute;
+	width: 100%;
+}
+
+button {
+	margin-left: 85%;
+}
+
+@media screen and (max-width: 600px) { /*当屏幕尺寸小于600px时，应用下面的CSS样式*/
+	.content {
+		width: 100%;
+			margin-left: 0;
+		border: 1px;
+		border-color: #e64340;
+		margin-top: 4.0rem;
+	}
+	button {
+		background-color: #e64340;
+		margin-left: 65%;
+	}
+}
+
+.order-img {
+	width: 35%;
+}
+
+body {
+	background-color: #fff;
+}
+</style>
+</head>
+
+<body>
+	<div class="top">
+		<ul class="layui-nav">
+			<li class="layui-nav-item"><a th:href="@{/menu}">菜单首页<span
+					class="layui-badge-dot"></span></a></li>
+			<li class="layui-nav-item"><a th:href="@{/order/showOrder}">我的订单<span
+					class="layui-badge" th:text="${session.orderCount}"></span></a></li>
+
+			<li class="layui-nav-item"><a href=""><img
+					src="//t.cn/RCzsdCq" class="layui-nav-img"><font
+					th:text="${session.userInfo.userName}"></font></a>
+				<dl class="layui-nav-child">
+					<dd>
+						<a th:href="@{/getUserInfo}">修改信息</a>
+					</dd>
+					<dd>
+						<a th:href="@{/logout}">退出</a>
+					</dd>
+				</dl></li>
+		</ul>
+	</div>
+	<div class="content" >
+	<div class="layui-card">
+			<div class="layui-card-header" style="background-color: #e64340">
+				<strong>订单明细</strong>
+			</div>
+				<table style="width: 100%; border: 1px;" class="layui-table">
+					<tr>
+						<td>订单号</td>
+						<td th:text="${orderDetailInfo.orderId}"></td>
+					<tr>
+					<tr>
+						<td>就餐餐厅</td>
+						<td th:text="${orderDetailInfo.restaurant}"></td>
+					<tr>
+					<tr>
+						<td>下单时间</td>
+						<td th:text="${orderDetailInfo.orderTime}"></td>
+					</tr>
+					<tr>
+						<td>下单人</td>
+						<td th:text="${orderDetailInfo.orderPerson}"></td>
+					</tr>
+					<tr>
+						<td>联系电话</td>
+						<td th:text="${orderDetailInfo.tel}"></td>
+					</tr>
+				</table>
+				<table class="layui-table">
+					<tr th:each="info : ${orderDetailInfo.orderItems}">
+						<td><img class="orde-img"
+							th:src="@{/foodImg/{foodId}(foodId=${info.foodId})}"></td>
+						<td th:text="${info.foodName}"></td>
+						<td>￥：<span th:text="${info.foodPrice}"></span></td>
+						<td>X<span th:text="${info.foodCount}"></span></td>
+					</tr>
+				</table>
+				<table class="layui-table">
+					<tr>
+						<td width="20%">菜品数量</td>
+						<td width="40%" th:text="${orderDetailInfo.foodCount}"></td>
+						<td width="20%">消费金额</td>
+						<td>￥：<span th:text="${orderDetailInfo.orderAmount}"></span></td>
+					</tr>
+				</table>
+				</div>
+		<button class="layui-btn layui-btn-danger back-button" type="button" style="background-color: #e64340;" onclick="goBack()">
+			<i class="layui-icon layui-icon-return"></i>返回
+		</button>
+	</div>
+</body>
+<script>
+	layui.use('element', function() {
+		var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+		//Hash地址的定位
+		var layid = location.hash.replace(/^#test=/, '');
+		element.tabChange('test', layid);
+
+		element.on('tab(test)', function(elem) {
+			location.hash = 'test=' + $(this).attr('lay-id');
+		});
+
+	});
+	
+	function goBack(){
+		location.href="/fos/order/showOrder";
+	}
+</script>
+</html>

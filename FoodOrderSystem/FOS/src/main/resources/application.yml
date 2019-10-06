@@ -1,0 +1,40 @@
+# tomcat configuration
+server:
+    port: 8080
+    servlet :
+      context-path: /fos
+
+
+
+# mybatis configuration
+mybatis: 
+  configuration:
+    map-underscore-to-camel-case: true
+
+# database configuration
+spring.datasource: 
+  url: jdbc:mysql://localhost:3306/db_fos?serverTimezone=GMT%2B8
+  username: root
+  password: root
+  driverClassName: com.mysql.jdbc.Driver
+
+# dev/release
+spring.profiles.active: dev
+#spring.profiles.active: prd
+
+
+#thymelea模板配置
+spring.thymeleaf: 
+   prefix: classpath:/templates/
+   suffix: .html
+   mode: HTML5
+   encoding: UTF-8
+   content-type: text/html
+   cache: false
+   
+spring.resources.chain.strategy.content: 
+   enabled: true
+   paths: /**
+
+# project
+fos.foodImage.path: E:/fos/foodImg

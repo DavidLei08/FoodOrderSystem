@@ -1,0 +1,130 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>order list</title>
+<link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+<script th:src="@{/layui/layui.all.js}"></script>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/jquery/jquery-1.9.1.min.js}"></script>
+<style>
+.content {
+	width: 98%;
+	margin-top:140px;
+	margin-left: 1%;
+}
+
+.top {
+	top: 0;
+	position: fixed;
+	width: 100%;
+	background-color: #ffffff;
+}
+</style>
+</head>
+
+<body>
+	<div class="top">
+		<ul class="layui-nav">
+			<li class="layui-nav-item"><a th:href="@{/menu}">菜单首页<span
+					class="layui-badge-dot"></span></a></li>
+			<li class="layui-nav-item layui-this"><a
+				th:href="@{/order/showOrder}">我的订单<span class="layui-badge" th:text="${session.orderCount}"></span></a></li>
+
+			<li class="layui-nav-item"><a href=""><img
+					src="//t.cn/RCzsdCq" class="layui-nav-img"><font
+					th:text="${session.userInfo.userName}"></font></a>
+				<dl class="layui-nav-child">
+					<dd>
+						<a th:href="@{/getUserInfo}">修改信息</a>
+					</dd>
+					<dd>
+						<a th:href="@{/logout}">退出</a>
+					</dd>
+				</dl></li>
+		</ul>
+		<hr>
+	</div>
+	<div class="content">
+		<table class="layui-table" lay-size="sm" >
+			<thead>
+				<tr style="background-color:#e64340;color:#fff;">
+					<th>单号</th>
+					<th>就餐饭店</th>
+					<th>菜品数量</th>
+					<th>消费金额</th>
+					<th>下单时间</th>
+				</tr>
+			</thead>
+			<tbody id="order-info-list">
+				<tr>
+					<td colspan="5">订单获取失败</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+<script>
+	layui.use('element', function() {
+		var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+		//Hash地址的定位
+		var layid = location.hash.replace(/^#test=/, '');
+		element.tabChange('test', layid);
+
+		element.on('tab(test)', function(elem) {
+			location.hash = 'test=' + $(this).attr('lay-id');
+		});
+
+	});
+
+	var OrderInfo;
+	$(function() {
+		showOrderList();
+	})
+
+	function showOrderList() {
+		$.ajax({//请求方式
+			type : "GET",
+			//请求的媒体类型
+			contentType : "application/json;charset=UTF-8",
+			//请求地址
+			url : "/fos/order/getOrderlist",
+			//数据，json字符串
+			data : null,
+			//请求成功
+			success : function(result) {
+				OrderInfo=result;
+				showOrderHtml(result);
+			},
+			//请求失败，包含具体的错误信息
+			error : function(e) {
+				showMenu(null);
+				console.log(e.status);
+				console.log(e.responseText);
+			}
+		});
+	}
+
+	function showOrderHtml(orderList) {
+		var orderHtml = '';
+		for (i = 0; i < orderList.length; i++) {
+			orderHtml += '<tr onclick="getOrderInfo(\'' + orderList[i].orderId
+					+ '\')"><td>' + orderList[i].orderId + '</td>' + '<td>'
+					+ orderList[i].restaurant + '</td>' + '<td>'
+					+ orderList[i].foodCount + '</td>'
+					+ '<td><span>￥：&nbsp;</span>' + orderList[i].orderAmount
+					+ '</td>' + '<td>' + orderList[i].orderTime + '</td>'
+					+ '</tr>'
+		}
+		$("#order-info-list").html(orderHtml);
+	}
+	
+	function getOrderInfo(orderId){
+		location.href="/fos/order/showInfo/"+orderId;
+	}
+	
+</script>
+</html>

@@ -1,0 +1,67 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+<link th:href="@{/css/admin.css}" rel="stylesheet">
+<script th:src="@{/layui/layui.all.js}"></script>
+<script th:src="@{/jquery/jquery-1.9.1.min.js}"></script>
+<title>user login page</title>
+<style>
+@media screen and (max-width: 600px) { /*当屏幕尺寸小于600px时，应用下面的CSS样式*/
+	#twoimage {
+		display: none;
+	}
+}
+</style>
+</head>
+<body>
+	<div id="container">
+		<div class="admin-login-background">
+			<div class="admin-header" style="text-align: center">
+				<font size="4">自助点单系统登录</font>
+				<!--  <img src="image/ex_logo.png" class="admin-logo" > -->
+			</div>
+			<form class="layui-form" th:action="@{/login}" th:method="post">
+				<div>
+					<i
+						class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
+					<input type="text" name="userName" placeholder="请输入用户名/手机号"
+						class="layui-input admin-input admin-input-username"
+						required="required">
+				</div>
+
+				<div>
+					<i
+						class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
+					<input type="password" name="password" placeholder="请输入密码"
+						class="layui-input admin-input admin-input-verify"
+						required="required">
+
+				</div>
+				<button class="layui-btn admin-button" lay-submit
+					lay-filter="formDemo">登录</button>
+
+			</form>
+
+			<a th:href="@{/register}"> <font
+				style="font-style: italic; font-size: 14px;">没有账号，注册一个</font></a>
+			<div id="twoimage" align="center">
+				<img th:src="@{''+${twoImgUrl}}" /><br> <font size="2">手机扫描二维码<br>也可访问当前页面
+				</font>
+			</div>
+		</div>
+	</div>
+	<div style="display:none;" id="msg" th:text="${successMsg}"></div>
+	
+	<script type="text/javascript">
+	$(function(){
+		if($("#msg").html()!=''){
+			layer.msg($("#msg").html());
+		}
+		
+	})
+	</script>
+</body>
+</html>

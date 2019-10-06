@@ -1,0 +1,95 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+<link th:href="@{/css/admin.css}" rel="stylesheet">
+<script th:src="@{/layui/layui.all.js}"></script>
+<script th:src="@{/jquery/jquery-1.9.1.min.js}"></script>
+<title>user register page</title>
+</head>
+<body>
+	<div class="login-main">
+		<div id="container">
+			<div class="admin-login-background">
+				<div class="admin-header" style="text-align: center">
+					<font size="4">自助点单系统注册</font>
+					<!--  <img src="image/ex_logo.png" class="admin-logo" > -->
+				</div>
+				<form class="layui-form" th:action="@{/register}" th:method="post"
+					onsubmit="return  checkForm()">
+
+					<div>
+						<i
+							class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
+						<input type="text" name="userName" placeholder="用户名"
+							required="required" autocomplete="off"
+							class="layui-input admin-input admin-input-username">
+					</div>
+					<div>
+						<i
+							class="layui-icon layui-icon-face-smile-b admin-icon admin-icon-face-smile-b"></i>
+						<input type="text" name="likeTaste" placeholder="个人口味"
+							autocomplete="off" class="layui-input admin-input ">
+					</div>
+					<div>
+						<i
+							class="layui-icon layui-icon-face-cry admin-icon admin-icon-face-cry"></i>
+						<input type="text" name="dislikeFood" placeholder="个人忌口"
+							autocomplete="off" class="layui-input admin-input ">
+					</div>
+					<div>
+						<i
+							class="layui-icon layui-icon-location admin-icon admin-icon-location"></i>
+						<input type="text" name="originPlace" placeholder="常驻地址"
+							autocomplete="off" class="layui-input admin-input ">
+					</div>
+					<div>
+						<i
+							class="layui-icon layui-icon-cellphone admin-icon admin-icon-cellphone"></i>
+						<input type="text" name="tel" placeholder="联系电话"
+							required="required" autocomplete="off"
+							class="layui-input admin-input ">
+					</div>
+					<div>
+						<i
+							class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
+						<input type="password" name="password" placeholder="登录密码"
+							required="required" autocomplete="off"
+							class="layui-input admin-input">
+
+					</div>
+					<div>
+						<i
+							class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
+						<input type="password" name="confirmPassword" placeholder="确认密码"
+							required="required" autocomplete="off"
+							class="layui-input admin-input admin-input-verify">
+
+					</div>
+					<button class="layui-btn admin-button" lay-submit
+						lay-filter="formDemo" type="submit">立即注册</button>
+
+				</form>
+				<a th:href="@{/login}"> <font
+					style="font-style: italic; font-size: 14px;">已有账号，返回登录</font></a>
+			</div>
+		</div>
+		</div>
+		<script>
+			function checkForm() {
+				var p1 = $("input[name='password']").val();
+				var p2 = $("input[name='confirmPassword']").val();
+				if (p1 != null && p1 == p2) {
+					console.log("check successful");
+					
+					return true;
+				} else {
+					return false;
+
+				}
+			}
+		</script>
+</body>
+</html>

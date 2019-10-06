@@ -1,0 +1,353 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>food menu</title>
+<link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+<script th:src="@{/layui/layui.all.js}"></script>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/jquery/jquery-1.9.1.min.js}"></script>
+<style>
+.content {
+	width: 100%;
+}
+/*底部结算样式*/
+.total {
+	clear: both;
+	width: 100%;
+	height: 3.0rem;
+	line-height: 3.0rem;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	border-top: 0.05rem solid #ddd;
+	font-size: 16px;
+	background-color: #ffffff;
+}
+
+.total p:nth-of-type(1) {
+	width: 48%;
+	height: 100%;
+	float: left;
+	padding-left: 2%;
+}
+
+.total p:nth-of-type(1)>.checkAll {
+	display: block;
+	width: 0.8rem;
+	height: 0.8rem;
+	background: url('__STATIC__images/selectInput.png') no-repeat;
+	background-size: 100% 100%;
+	float: left;
+	margin: 0.6rem 0.3rem 0 0;
+	border-radius: 50%;
+}
+
+.total p:nth-of-type(1)>.checkRed {
+	display: block;
+	width: 0.8rem;
+	height: 0.8rem;
+	background: url('__STATIC__images/selectedred.png') no-repeat;
+	background-size: 100% 100%;
+	float: left;
+	margin: 0.6rem 0.3rem 0 0;
+	border-radius: 50%;
+}
+
+.total p:nth-of-type(2) {
+	width: 30%;
+	height: 100%;
+	float: left;
+	text-align: center;
+}
+
+.total a {
+	float: left;
+	display: block;
+	width: 20%;
+	height: 100%;
+	color: #fff;
+	background-color: #e64340;
+	text-align: center;
+}
+
+.top {
+	top: 0;
+	position: fixed;
+	width: 100%;
+	background-color: #ffffff;
+}
+
+.content {
+	margin-top: 120px;
+}
+
+.add-button {
+	width: 40px;
+	height: 40px;
+	font-size: 28px;
+	background-color: #e64340;
+	border: 0;
+	color: #fff;
+	border-radius: 50%;
+}
+
+.increase-button {
+	width: 40px;
+	height: 40px;
+	font-size: 28px;
+	background-color: #e64340;
+	border: 0;
+	color: #fff;
+	border-radius: 50%;
+}
+
+.img_food {
+	width: 42%;
+	height: 150px;
+	margin-left:5px;
+}
+
+@media screen and (max-width: 600px) { /*当屏幕尺寸小于600px时，应用下面的CSS样式*/
+	.img_food {
+		width: 70%;
+		height: 80px;
+	}
+}
+</style>
+</head>
+
+<body>
+	<div class="top">
+		<ul class="layui-nav">
+			<li class="layui-nav-item layui-this"><a th:href="@{/menu}">菜单首页<span
+					class="layui-badge-dot"></span></a></li>
+			<li class="layui-nav-item"><a th:href="@{/order/showOrder}">我的订单<span
+					class="layui-badge" th:text="${session.orderCount}"></span></a></li>
+
+			<li class="layui-nav-item" ><a href="" ><img
+					src="//t.cn/RCzsdCq" class="layui-nav-img"><font th:text="${session.userInfo.userName}"></font></a>
+				<dl class="layui-nav-child">
+					<dd>
+						<a th:href="@{/getUserInfo}">修改信息</a>
+					</dd>
+					<dd>
+						<a th:href="@{/logout}">退出</a>
+					</dd>
+				</dl></li>
+		</ul>
+		<div class="layui-tab">
+			<ul class="layui-tab-title">
+				<li class="layui-this" onclick="getAllMenu()">全部菜品</li>
+				<li  onclick="getRecommendMenu()">今日推荐</li>
+			</ul>
+		</div>
+	</div>
+
+	<hr>
+	<div class="content">
+		
+		
+	</div>
+	<div class="total">
+		<p class="allprice">
+			数量:<span><font id="food_count">0</font>&nbsp;例</span>
+		</p>
+		<p class="allprice">
+			合计:￥<span id="food_amount">0.00</span>
+		</p>
+		<a th:href="@{/order/confrimOrderInfo}" id='settlement'>下单</a>
+	</div>
+	<input id ="errorMsg" type="hidden" th:text="${successMsg}" style="display:none">
+</body>
+<script>
+	layui.use('element', function() {
+		var $ = layui.jquery, element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+		//Hash地址的定位
+		var layid = location.hash.replace(/^#test=/, '');
+		element.tabChange('test', layid);
+
+		element.on('tab(test)', function(elem) {
+			location.hash = 'test=' + $(this).attr('lay-id');
+		});
+
+	});
+	
+	var menuFlag=0;
+	//获取全部菜品
+	function getAllMenu(){
+		 $.ajax({
+	            //请求方式
+	            type : "GET",
+	            //请求的媒体类型
+	            contentType: "application/json;charset=UTF-8",
+	            //请求地址
+	            url : "/fos/food/getAll",
+	            //数据，json字符串
+	            data : null,
+	            //请求成功
+	            success : function(result) {
+	            	console.log(result);
+	            	showMenu(result);
+	            },
+	            //请求失败，包含具体的错误信息
+	            error : function(e){
+	            	showMenu(null);
+	                console.log(e.status);
+	                console.log(e.responseText);
+	            }
+	        });
+		 menuFlag=0;
+	}
+
+	//获取推荐菜品
+	function getRecommendMenu(){
+		 $.ajax({
+	            //请求方式
+	            type : "GET",
+	            //请求的媒体类型
+	            contentType: "application/json;charset=UTF-8",
+	            //请求地址
+	            url : "/fos/food/getRecommend",
+	            //数据，json字符串
+	            data : null,
+	            //请求成功
+	            success : function(result) {
+	            	console.log(result);
+	            	showMenu(result);
+	            },
+	            //请求失败，包含具体的错误信息
+	            error : function(e){
+	            	showMenu(null);
+	                console.log(e.status);
+	                console.log(e.responseText);
+	            }
+	        });
+		 menuFlag=1;
+	}
+	
+	//渲染菜单列表
+	function showMenu(menuObj){
+		if(menuObj==null||menuObj==undefined){
+			$(".content").html('<div class="layui-card" style="margin-left:2%">菜单获取失败！！</div>');
+		}else{
+
+			var menuHtml='';
+			for(i=0;i<menuObj.length;i++){
+				var buttonHtml='<button class="increase-button" onclick="increaseItem(this.value)" value="'+menuObj[i].foodId+'">-</button></td>';
+				if(menuObj[i].count==0){
+					 buttonHtml='<button class="increase-button" onclick="increaseItem(this.value)" value="'+menuObj[i].foodId+'" disabled="disabled" style="background-color:gray">-</button></td>';
+				}
+				menuHtml+='<div class="layui-card"><table style="width: 100%"><tr>'+
+					'<td width="35%"><img class="img_food" alt=""'+
+						'src="/fos/foodImg/'+menuObj[i].foodId+'"></td>'+
+					'<td width="35%"><strong>'+menuObj[i].foodName+'</strong><br>'+
+					'价格:￥&nbsp;<span><font color="#FF6600">'+menuObj[i].foodPrice+'<font></span>元/例</td>'+
+					'<td><button class="add-button" onclick="addItem(this.value)" value="'+menuObj[i].foodId+'">+</button>'+
+						'<span class="menu_count">'+menuObj[i].count+'</span>'+
+						buttonHtml+
+				'</tr>'+
+			'</table>'+
+		'</div>'
+			}
+			$(".content").html(menuHtml+"<div style='height: 3.0rem;'></div>");
+		}
+	}
+	
+	//画面加载时渲染菜单
+	$(function(){
+		if($("#successMsg").val()!=''&&$("#successMsg").val()!=undefined){
+	         layer.msg($("#successMsg").val());
+		}
+		getAllMenu();
+		 $.ajax({
+	            //请求方式
+	            type : "GET",
+	            //请求的媒体类型
+	            contentType: "application/json;charset=UTF-8",
+	            //请求地址
+	            url : "/fos/order/getNowOrder",
+	            //数据，json字符串
+	            data : null,
+	            //请求成功
+	            success : function(result) {
+	       		 $("#food_count").html(result.foodCount);
+	    		 $("#food_amount").html(result.orderAmount);
+	            },
+	            //请求失败，包含具体的错误信息
+	            error : function(e){
+	            	orderWrapper=null;
+	                console.log(e.status);
+	                console.log(e.responseText);
+	            }
+	        });
+
+		
+	})
+	
+	//添加菜品到购物车
+	function addItem(foodId){
+		 $.ajax({
+	            //请求方式
+	            type : "POST",
+	            //请求的媒体类型
+	            contentType: "application/json;charset=UTF-8",
+	            //请求地址
+	            url : "/fos/order/addOrderItem/"+foodId,
+	            //数据，json字符串
+	            data : null,
+	            //请求成功
+	            success : function(result) {
+	       		 $("#food_count").html(result.foodCount);
+	    		 $("#food_amount").html(result.orderAmount);
+	    		 if(menuFlag==0){
+	    			 getAllMenu();
+	    			 
+	    		 }else{
+	    			 getRecommendMenu();
+	    		 }
+	            },
+	            //请求失败，包含具体的错误信息
+	            error : function(e){
+	            	orderWrapper=null;
+	                console.log(e.status);
+	                console.log(e.responseText);
+	            }
+	        });
+	}
+	
+	//减去菜品
+	function increaseItem(foodId){
+		 $.ajax({
+	            //请求方式
+	            type : "POST",
+	            //请求的媒体类型
+	            contentType: "application/json;charset=UTF-8",
+	            //请求地址
+	            url : "/fos/order/increaseFoodItem/"+foodId,
+	            //数据，json字符串
+	            data : null,
+	            //请求成功
+	            success : function(result) {
+	       		 $("#food_count").html(result.foodCount);
+	    		 $("#food_amount").html(result.orderAmount);
+	       		 if(menuFlag==0){
+	    			 getAllMenu();
+	    			 
+	    		 }else{
+	    			 getRecommendMenu();
+	    		 }
+	            },
+	            //请求失败，包含具体的错误信息
+	            error : function(e){
+	                console.log(e.status);
+	                console.log(e.responseText);
+	            }
+	        });
+
+	}
+</script>
+</html>
