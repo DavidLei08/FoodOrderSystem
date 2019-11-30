@@ -22,7 +22,6 @@ import java.util.Set;
  * @Date 2018年8月16日 下午3:17:34
  *
  */
-@Service
 public class CustomWebSocketHandler extends TextWebSocketHandler implements WebSocketHandler {
     private Logger logger = LoggerFactory.getLogger(CustomWebSocketHandler.class);
     // 在线用户列表

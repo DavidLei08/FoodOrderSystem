@@ -2,7 +2,6 @@ package com.edu.ahtcm.xg.fos.config;
 
 import com.edu.ahtcm.xg.fos.controller.socket.CustomWebSocketHandler;
 import com.edu.ahtcm.xg.fos.controller.socket.CustomWebSocketInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
@@ -22,13 +21,10 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class CustomWebSocketConfig implements WebSocketConfigurer {
 
-    @Autowired
-    private CustomWebSocketInterceptor customWebSocketInterceptor;
-
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(customWebSocketHandler(), "/webSocketBySpring/customWebSocketHandler").addInterceptors(customWebSocketInterceptor).setAllowedOrigins("*");
-        registry.addHandler(customWebSocketHandler(), "/sockjs/webSocketBySpring/customWebSocketHandler").addInterceptors(customWebSocketInterceptor).setAllowedOrigins("*").withSockJS();
+        registry.addHandler(customWebSocketHandler(), "/webSocketBySpring/customWebSocketHandler").addInterceptors(new CustomWebSocketInterceptor()).setAllowedOrigins("*");
+        registry.addHandler(customWebSocketHandler(), "/sockjs/webSocketBySpring/customWebSocketHandler").addInterceptors(new CustomWebSocketInterceptor()).setAllowedOrigins("*").withSockJS();
     }
 
     @Bean
