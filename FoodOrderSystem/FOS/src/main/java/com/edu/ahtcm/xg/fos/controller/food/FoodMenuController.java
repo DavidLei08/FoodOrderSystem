@@ -16,7 +16,7 @@ import com.edu.ahtcm.xg.fos.model.FoodModel;
 import com.edu.ahtcm.xg.fos.model.OrderItemModel;
 import com.edu.ahtcm.xg.fos.model.UserModel;
 import com.edu.ahtcm.xg.fos.service.food.FoodMenuService;
-import com.edu.ahtcm.xg.fos.utils.MenuSetUtil;
+import com.edu.ahtcm.xg.fos.utils.local.MenuSetUtil;
 
 /**
  * 点餐用菜单Controller
@@ -62,7 +62,8 @@ public class FoodMenuController {
 	public List<FoodModel> getRecommendFood(HttpSession session) {
 
 		List<FoodModel> foodModels = foodMenudService.getRecommend((UserModel) session.getAttribute("userInfo"));
-		OrderWrapperBean orderWrapperBean = (OrderWrapperBean) session.getAttribute("orderInfo");
+		OrderWrapperBean orderWrapperBean;
+		orderWrapperBean = (OrderWrapperBean) session.getAttribute("orderInfo");
 
 		if (orderWrapperBean != null && orderWrapperBean.getOrderItems().size() > 0) {
 			List<OrderItemModel> itemModels = orderWrapperBean.getOrderItems();

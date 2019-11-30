@@ -17,8 +17,8 @@ import com.edu.ahtcm.xg.fos.model.UserModel;
 import com.edu.ahtcm.xg.fos.repository.FoodRespository;
 import com.edu.ahtcm.xg.fos.repository.OrderItemRepository;
 import com.edu.ahtcm.xg.fos.repository.OrderRespository;
-import com.edu.ahtcm.xg.fos.utils.MathUtil;
-import com.edu.ahtcm.xg.fos.utils.RandIDUtil;
+import com.edu.ahtcm.xg.fos.utils.math.MathUtil;
+import com.edu.ahtcm.xg.fos.utils.local.RandIDUtil;
 
 /**
  * 订单操作用serviceImpl

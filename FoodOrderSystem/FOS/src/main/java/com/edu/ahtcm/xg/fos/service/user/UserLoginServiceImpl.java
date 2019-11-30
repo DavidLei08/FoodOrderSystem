@@ -9,7 +9,7 @@ import com.edu.ahtcm.xg.fos.controller.login.RegisterInputForm;
 import com.edu.ahtcm.xg.fos.model.UserModel;
 import com.edu.ahtcm.xg.fos.repository.OrderRespository;
 import com.edu.ahtcm.xg.fos.repository.UserRespository;
-import com.edu.ahtcm.xg.fos.utils.RandIDUtil;
+import com.edu.ahtcm.xg.fos.utils.local.RandIDUtil;
 
 @Service
 public class UserLoginServiceImpl implements UserLoginService {

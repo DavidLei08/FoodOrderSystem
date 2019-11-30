@@ -29,7 +29,6 @@ spring.thymeleaf:
    suffix: .html
    mode: HTML5
    encoding: UTF-8
-   content-type: text/html
    cache: false
    
 spring.resources.chain.strategy.content: 
@@ -38,3 +37,4 @@ spring.resources.chain.strategy.content:
 
 # project
 fos.foodImage.path: E:/fos/foodImg
+fos.keystore.path: E:/.keystore

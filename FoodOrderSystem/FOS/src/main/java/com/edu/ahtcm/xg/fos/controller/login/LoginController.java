@@ -4,16 +4,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.edu.ahtcm.xg.fos.utils.encrypt.EncryptInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.edu.ahtcm.xg.fos.model.UserModel;
 import com.edu.ahtcm.xg.fos.service.user.UserLoginService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用户登录Controller
@@ -69,9 +74,16 @@ public class LoginController {
 		return "redirect:/login";
 	}
 
-	
+	@ResponseBody
 	@GetMapping("/test")
-	public void  test() {
-
+	public EncryptInfo test() {
+		List<String> encryptFieldNames = new ArrayList<String>();
+		encryptFieldNames.add("password");
+		encryptFieldNames.add("token");
+		EncryptInfo info = new EncryptInfo();
+		info.setEncryptNames(encryptFieldNames);
+		info.setPackageName("com.edu.ahtcm.xg.fos.utils.encrypt");
+		info.setVersion("1.0.1");
+		return info;
 	}
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.edu.ahtcm.xg.fos.model.FoodModel;
 import com.edu.ahtcm.xg.fos.model.UserModel;
 import com.edu.ahtcm.xg.fos.repository.FoodRespository;
-import com.edu.ahtcm.xg.fos.utils.RecommendUtil;
+import com.edu.ahtcm.xg.fos.utils.local.RecommendUtil;
 
 @Service
 public class FoodMenuServiceImpl implements FoodMenuService {

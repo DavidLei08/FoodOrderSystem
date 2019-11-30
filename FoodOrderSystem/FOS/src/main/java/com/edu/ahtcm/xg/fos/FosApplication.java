@@ -8,7 +8,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.edu.ahtcm.xg.fos.utils.IPAddrUtil;
+import com.edu.ahtcm.xg.fos.utils.ip.IPAddrUtil;
 
 @EnableTransactionManagement
 @SpringBootApplication
@@ -24,7 +24,8 @@ public class FosApplication extends SpringBootServletInitializer{
 		System.out.println("NetWorkUrl: http://"+IPAddrUtil.getLocalIpAddr()+":8080/fos/login");
 	}
 	
-    @Override//为了打包springboot项目
+    @Override
+	//为了打包springboot项目
     protected SpringApplicationBuilder configure(
             SpringApplicationBuilder builder) {
         return builder.sources(this.getClass());
